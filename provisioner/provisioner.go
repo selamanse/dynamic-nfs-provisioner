@@ -50,9 +50,10 @@ import (
 	menv "github.com/openebs/maya/pkg/env/v1alpha1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/selection"
 	kubeinformers "k8s.io/client-go/informers"
 	listersv1 "k8s.io/client-go/listers/core/v1"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
 
 	nfshook "github.com/openebs/dynamic-nfs-provisioner/pkg/hook"
 	clientset "k8s.io/client-go/kubernetes"
@@ -282,7 +283,7 @@ func (p *Provisioner) validateNodeAffinityRules() error {
 		return nil
 	}
 
-	nodeSelector, err := v1helper.NodeSelectorRequirementsAsSelector(p.nodeAffinity.MatchExpressions)
+	nodeSelector, err := nodeSelectorRequirementsAsSelector(p.nodeAffinity.MatchExpressions)
 	if err != nil {
 		return err
 	}
@@ -296,6 +297,39 @@ func (p *Provisioner) validateNodeAffinityRules() error {
 		return errors.Errorf("%s (%s)", NodeAffinityRulesMismatchEvent, nodeSelector.String())
 	}
 	return nil
+}
+
+func nodeSelectorRequirementsAsSelector(nsm []v1.NodeSelectorRequirement) (labels.Selector, error) {
+	selector := labels.NewSelector()
+
+	for _, expr := range nsm {
+		var op selection.Operator
+
+		switch expr.Operator {
+		case v1.NodeSelectorOpIn:
+			op = selection.In
+		case v1.NodeSelectorOpNotIn:
+			op = selection.NotIn
+		case v1.NodeSelectorOpExists:
+			op = selection.Exists
+		case v1.NodeSelectorOpDoesNotExist:
+			op = selection.DoesNotExist
+		case v1.NodeSelectorOpGt:
+			op = selection.GreaterThan
+		case v1.NodeSelectorOpLt:
+			op = selection.LessThan
+		default:
+			return nil, errors.Errorf("%q is not a valid node selector operator", expr.Operator)
+		}
+
+		requirement, err := labels.NewRequirement(expr.Key, op, expr.Values)
+		if err != nil {
+			return nil, err
+		}
+		selector = selector.Add(*requirement)
+	}
+
+	return selector, nil
 }
 
 // sendEventOrIgnore sends anonymous nfs-pv provision/delete events

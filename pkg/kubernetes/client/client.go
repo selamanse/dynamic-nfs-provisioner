@@ -79,7 +79,7 @@ type getKubeConfigPathFromENVFn func(env.ENVKey) string
 // NOTE:
 //
 //	typed function makes it simple to mock
-type getKubeDynamicClientFn func(*rest.Config) (dynamic.Interface, error)
+type getKubeDynamicClientFn func(*rest.Config) (*dynamic.DynamicClient, error)
 
 // getKubeClientsetFn is a typed function
 // to abstract getting kubernetes clientset

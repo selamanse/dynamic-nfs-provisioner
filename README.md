@@ -27,6 +27,7 @@ Please refer to our [Quickstart](https://github.com/openebs/dynamic-nfs-provisio
 | 0.9.0                   | K8s >= 1.14  | [Changelog](https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/CHANGELOG.md#090--2022-01-03)  |
 | 0.10.0                  | K8s >= 1.14  | [Changelog](https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/CHANGELOG.md#0100--2023-02-09) |
 | 0.11.0                  | K8s >= 1.14  | [Changelog](https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/CHANGELOG.md#0110--2023-12-08)  |
+| 0.12.0                  | K8s >= 1.24, tested with K8s 1.33 | [Changelog](https://github.com/openebs/dynamic-nfs-provisioner/blob/develop/CHANGELOG.md#0120--2026-06-04) |
 
 
 ## Usage

@@ -1,3 +1,10 @@
+0.12.0 / 2026-06-04
+========================
+* update Kubernetes client dependencies for modern clusters and remove the old OpenAPI protobuf registration conflict
+* switch provisioner leader election from Endpoints to Leases and add `coordination.k8s.io/leases` RBAC
+* update the provisioner build image to Go 1.23 for the refreshed Kubernetes dependency stack
+* publish release images to GHCR with `v0.12.0` and `0.12.0` tags
+
 0.11.0 / 2023-12-08
 ========================
 * add support for specifying mountOptions to default StorageClass ([#164](https://github.com/openebs/dynamic-nfs-provisioner/pull/164),[@pentago](https://github.com/farcaller) [@dsharma-dc](https://github.com/dsharma-dc))

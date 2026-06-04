@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM golang:1.19.13 as build
+FROM golang:1.23.12 as build
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -33,6 +33,7 @@ WORKDIR /go/src/github.com/openebs/dynamic-nfs-provisioner/
 RUN apt-get update && apt-get install -y make git
 
 COPY go.mod go.sum ./
+COPY third_party ./third_party
 # Get dependancies - will also be cached if we won't change mod/sum
 RUN go mod download
 
