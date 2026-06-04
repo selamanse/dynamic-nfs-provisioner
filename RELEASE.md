@@ -26,13 +26,12 @@ Once the release branch is created, changelog from `changelogs/unreleased` needs
 
 The format of the release tag is either "Release-Name-RC1" or "Release-Name" depending on whether the tag is a release candidate or a release. (Example: v1.9.0-RC1 is a GitHub release tag for the release build. v1.9.0 is the release tag that is created after the release criteria are satisfied by the release candidate builds.)
 
-Once the release is triggered, Github Actions release workflow has to be monitored. Once the release workflow is passed images are pushed to docker hub and quay.io. Images can be verified by going through docker hub and quay.io. Also the images shouldn't have any high-level vulnerabilities.
+Once the release is triggered, Github Actions release workflow has to be monitored. Once the release workflow is passed images are pushed to GHCR. Images can be verified by going through GHCR. Also the images shouldn't have any high-level vulnerabilities.
 
 Images for the different components are published at the following location:
 
 - Dynamic NFS PV Provisioner <br />
-    https://quay.io/repository/openebs/provisioner-nfs?tab=tags <br />
-    https://hub.docker.com/r/openebs/provisioner-nfs/tags <br />
+    https://github.com/selamanse/dynamic-nfs-provisioner/pkgs/container/dynamic-nfs-provisioner <br />
 
 Once a release is created, update the release description with the changelog mentioned in `changelog/v1.9.x`. Once the changelogs are updated in the release, the repo owner needs to create a PR to `develop` with the following details:
 1. update the changelog from `changelog/v1.9.x` to `CHANGELOG.md`
