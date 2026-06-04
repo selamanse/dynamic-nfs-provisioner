@@ -7,6 +7,9 @@ on:
       - modern-k8s-provisioner-compat
     tags:
       - "v*"
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 permissions:
@@ -46,12 +49,41 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image tags
+        id: image
+        shell: bash
+        run: |
+          tags="${IMAGE}:latest
+          ${IMAGE}:${GITHUB_SHA}"
+
+          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+            version="${{ github.event.release.tag_name }}"
+          elif [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            version="${GITHUB_REF_NAME}"
+          else
+            version=""
+          fi
+
+          if [[ -n "${version}" ]]; then
+            tags="${tags}
+          ${IMAGE}:${version}"
+
+            if [[ "${version}" == v* ]]; then
+              tags="${tags}
+          ${IMAGE}:${version#v}"
+            fi
+          fi
+
+          {
+            echo "tags<<EOF"
+            echo "${tags}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: buildscripts/provisioner-nfs/provisioner-nfs.Dockerfile
           push: true
-          tags: |
-            ${{ env.IMAGE }}:latest
-            ${{ env.IMAGE }}:${{ github.sha }}
+          tags: ${{ steps.image.outputs.tags }}
