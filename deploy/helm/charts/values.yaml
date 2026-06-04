@@ -36,7 +36,7 @@ nfsProvisioner:
     # Make sure that registry name end with a '/'.
     # For example : quay.io/ is a correct value here and quay.io is incorrect
     registry:
-    repository: openebs/provisioner-nfs
+    repository: ghcr.io/selamanse/dynamic-nfs-provisioner
     tag:
     pullPolicy: IfNotPresent
   enableLeaderElection: "true"
@@ -49,7 +49,7 @@ nfsProvisioner:
   nfsServerAlpineImage:
     registry:
     repository: openebs/nfs-server-alpine
-    tag:
+    tag: 0.11.0
   resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
